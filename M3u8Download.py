@@ -60,9 +60,9 @@ class M3u8Download:
             for k, ts_url in enumerate(self._ts_url_list):
                 pool.submit(self.download_ts, ts_url, os.path.join(self._file_path, str(k)), self._num_retries)
         if self._success_sum == self._ts_sum:
-            self.output_mp4()
-            self.delete_file()
-            print(f"Download successfully --> {self._name}")
+            if self.output_mp4() == 0:
+                self.delete_file()
+                print(f"Download successfully --> {self._name}")
 
     def get_m3u8_info(self, m3u8_url, num_retries):
         """
@@ -187,7 +187,7 @@ class M3u8Download:
         """
         cmd = f"ffmpeg -allowed_extensions ALL -i {self._file_path}.m3u8 -acodec \
         copy -vcodec copy -f mp4 {self._file_path}.mp4"
-        os.system(cmd)
+        return os.system(cmd)
 
     def delete_file(self):
         file = os.listdir(self._file_path)
