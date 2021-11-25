@@ -73,7 +73,7 @@ class M3u8Download:
                 self._front_url = res.url.split(res.request.path_url)[0]
                 if "EXT-X-STREAM-INF" in res.text:  # 判定为顶级M3U8文件
                     for line in res.text.split('\n'):
-                        if "#" in line:
+                        if "#" in line or len(line.strip()) == 0:
                             continue
                         elif line.startswith('http'):
                             self._url = line
